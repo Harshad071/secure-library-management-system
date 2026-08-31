@@ -1,0 +1,10 @@
+# Ignore IDE files and build output
+/.idea/
+/.vscode/
+/target/
+/build/
+/.classpath
+/.project
+/.settings/
+*.iml
+*.log

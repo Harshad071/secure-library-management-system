@@ -1,5 +1,9 @@
 # Secure Library Management System
 
+## Day 1 — Foundation stage
+
+This branch represents the foundation milestone of the project: repository setup, backend scaffold, database configuration, and authentication baseline. It is the base layer before the core library workflows and final polish are added in later stages.
+
 A full-stack library management application with role-based workflows for members and administrators. It combines a React interface with a secure Spring Boot REST API, MySQL persistence, JWT authentication, and reproducible Docker deployment.
 
 ## Highlights

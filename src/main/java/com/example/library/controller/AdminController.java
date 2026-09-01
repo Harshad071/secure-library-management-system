@@ -1,5 +1,6 @@
 package com.example.library.controller;
 
+// Day 2: admin surface for approvals, users, and inventory health
 import com.example.library.dto.AdminUserDTO;
 import com.example.library.dto.DashboardStats;
 import com.example.library.service.AdminService;

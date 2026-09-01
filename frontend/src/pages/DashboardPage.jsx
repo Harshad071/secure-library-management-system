@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Activity, AlertTriangle, BookOpen, CheckCircle2, Clock3, Users } from 'lucide-react'
+
+// Day 2: member dashboard for borrow summaries, stats, and activity
 import toast from 'react-hot-toast'
 
 import PageWrapper from '../components/PageWrapper'

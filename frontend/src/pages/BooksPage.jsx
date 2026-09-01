@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BookOpen, Filter, Search } from 'lucide-react'
+
+// Day 2: searchable catalog for borrowing and availability checks
 import toast from 'react-hot-toast'
 
 import PageWrapper from '../components/PageWrapper'

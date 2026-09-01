@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Eye, EyeOff, Lock, ShieldCheck } from 'lucide-react'
+
+// Day 2: secure member access screen for the library portal
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 

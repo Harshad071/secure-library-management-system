@@ -1,5 +1,6 @@
 package com.example.library.controller;
 
+// Day 2: borrow flow for requests, approvals, returns, and member history
 import com.example.library.dto.BorrowRecordDTO;
 import com.example.library.security.CustomUserDetails;
 import com.example.library.service.BorrowService;

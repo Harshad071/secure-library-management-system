@@ -1,6 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
+// Day 2: route shell for protected member and admin workflows
+
 import AdminPage from './pages/AdminPage'
 import BooksPage from './pages/BooksPage'
 import DashboardPage from './pages/DashboardPage'

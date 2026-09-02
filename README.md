@@ -1,30 +1,27 @@
 # Secure Library Management System
 
-## Day 1 — Foundation stage
+A full-stack library management system with secure member and administrator workflows. Members can discover books, submit borrowing requests, track due dates, and return items. Administrators can manage inventory, review requests, monitor users, and oversee library activity.
 
-This branch represents the foundation milestone of the project: repository setup, backend scaffold, database configuration, and authentication baseline. It is the base layer before the core library workflows and final polish are added in later stages.
+## Features
 
-A full-stack library management application with role-based workflows for members and administrators. It combines a React interface with a secure Spring Boot REST API, MySQL persistence, JWT authentication, and reproducible Docker deployment.
-
-## Highlights
-
-- JWT authentication with protected routes and role-based access control
-- Separate member and administrator workflows
-- Book search, filtering, availability tracking, borrowing, approval, rejection, and returns
-- Live dashboard data, borrow history, overdue status, and in-app notifications
-- Persisted light/dark workspace theme
-- Spring Data JPA, Hibernate schema management, and seed data for local development
-- Containerized frontend, backend, and MySQL services with health checks and persistent storage
+- JWT authentication with BCrypt password hashing
+- Role-based access control for members and administrators
+- Book catalog search, filtering, availability, and inventory management
+- Borrow requests with admin approval and rejection
+- Returns, due dates, overdue tracking, and borrow history
+- Member and administrator dashboards with live summary data
+- In-app notifications and persisted light/dark workspace theme
+- Docker Compose deployment with MySQL health checks and persistent storage
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    Browser[React + Vite UI] -->|/api via Nginx| API[Spring Boot REST API]
-    API --> Security[Spring Security + JWT + RBAC]
+    Browser[React + Vite] -->|/api| API[Spring Boot REST API]
+    API --> Security[Spring Security + JWT]
     Security --> Services[Service Layer]
-    Services --> JPA[Spring Data JPA / Hibernate]
-    JPA --> DB[(MySQL)]
+    Services --> JPA[Spring Data JPA]
+    JPA --> DB[(MySQL 8.4)]
 ```
 
 ## Technology stack
@@ -32,46 +29,47 @@ flowchart LR
 | Layer | Technologies |
 | --- | --- |
 | Frontend | React 19, Vite, Tailwind CSS, React Router, Axios |
-| Backend | Java 25, Spring Boot 3.5, Spring Security, Spring Data JPA, Hibernate |
+| Backend | Java 25, Spring Boot 3.5, Spring Security, Spring Data JPA |
 | Database | MySQL 8.4 |
 | Delivery | Docker Compose, Nginx, Maven Wrapper |
 
-## Run with Docker
+## Quick start with Docker
 
 ### Prerequisites
 
 - Docker Desktop
+- Git
 
-Create the local-only environment file and start the stack:
+Create a local environment file and start the stack:
 
 ```powershell
 Copy-Item .env.example .env
-# Replace the two placeholder values in .env with strong secrets.
+# Replace both placeholder values in .env with strong local secrets.
 docker compose up --build
 ```
 
-| Service | URL / connection |
+Open the application at `http://localhost:5173`.
+
+| Service | Address |
 | --- | --- |
 | Frontend | http://localhost:5173 |
 | Backend API | http://localhost:8081 |
-| Health endpoint | http://localhost:8081/actuator/health |
-| MySQL Workbench | `localhost:3307` |
+| Health check | http://localhost:8081/actuator/health |
+| MySQL | localhost:3307 |
 
-The host ports 8081 and 3307 avoid common local conflicts. Within Docker, the backend remains on port 8080 and MySQL remains on port 3306.
-
-Stop containers while preserving database records:
+Stop the services while preserving database data:
 
 ```powershell
 docker compose down
 ```
 
-Only `docker compose down -v` removes the named `mysql-data` volume.
+Use `docker compose down -v` only when you intentionally want to remove the database volume.
 
 ## Run locally
 
 ### Backend
 
-Use a Java 25 JDK and a running MySQL instance named `secure_library`:
+Use Java 25 and a running MySQL database named `secure_library`:
 
 ```powershell
 $env:DB_PASSWORD = "your-mysql-password"
@@ -86,42 +84,45 @@ npm install
 npm run dev
 ```
 
-The local frontend defaults to `http://localhost:8080/api`. Set `VITE_API_BASE_URL` if your backend uses another port.
+The frontend defaults to `http://localhost:8080/api` for local API requests. Set `VITE_API_BASE_URL` when the backend uses another address.
 
 ## Quality checks
 
 ```powershell
-# Backend tests (requires Java 25)
-$env:JAVA_HOME = "C:\\path\\to\\jdk-25"
+# Backend tests
 .\mvnw.cmd test
 
-# Frontend production build
+# Frontend lint and production build
 Set-Location frontend
+npm run lint
 npm run build
 ```
-
-## Security notes
-
-- Runtime credentials belong only in `.env`; it is ignored by Git.
-- `.env.example` contains placeholders only.
-- JWT, BCrypt password hashing, input validation, and role-based endpoint protection are enforced by the backend.
-- Development seed accounts are intended for local demos only. Change or remove them before any external deployment.
 
 ## Project structure
 
 ```text
-src/                 Spring Boot application
-frontend/            React client and Nginx production configuration
-docker-compose.yml   Full local stack
-Dockerfile           Backend production image
-.env.example         Required environment variable template
-docs/                Engineering notes and development log
+src/main/java/       Spring Boot API, security, services, and persistence
+src/test/             Backend tests
+frontend/src/         React application, pages, components, and API clients
+docker-compose.yml    Frontend, backend, and MySQL services
+Dockerfile            Backend production image
+.env.example          Required local environment variables
+docs/                 Engineering notes and development log
 ```
 
-## Development log
+## Security notes
 
-See [the Day 1 baseline](docs/DEVELOPMENT_LOG.md) for the public engineering journey and upcoming production-readiness work.
+- Never commit `.env`, passwords, JWT secrets, or database dumps.
+- Replace the development JWT secret before any external deployment.
+- Development seed accounts are for local demos only.
+- Report vulnerabilities privately rather than posting credentials or exploit details in public issues.
+
+## Build milestones
+
+- `day1-foundation`: initial repository and application foundation
+- `day2-core-features`: member, admin, catalog, and borrowing workflows
+- `day3-final-release`: final documentation, security configuration, and release polish
 
 ## License
 
-No license has been selected yet. Choose one before publishing if you want others to reuse the code.
+No license has been selected yet. Add one before accepting external reuse.

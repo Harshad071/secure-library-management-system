@@ -1,5 +1,6 @@
 package com.example.library.controller;
 
+// Day 2: backend authentication layer for secure sign-in and member registration
 import com.example.library.dto.AuthResponse;
 import com.example.library.dto.LoginRequest;
 import com.example.library.dto.RegisterRequest;

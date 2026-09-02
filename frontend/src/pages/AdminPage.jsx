@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AlertTriangle, BarChart3, BookPlus, Check, ShieldCheck, Trash2, X } from 'lucide-react'
+
+// Day 2: admin control panel for catalog and borrow approvals
 import toast from 'react-hot-toast'
 
 import PageWrapper from '../components/PageWrapper'

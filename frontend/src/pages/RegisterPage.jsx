@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { BadgeCheck, ShieldCheck, UserPlus } from 'lucide-react'
+
+// Day 2: secure registration flow for new members and admins
 import toast from 'react-hot-toast'
 
 import { register } from '../services/authService'

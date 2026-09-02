@@ -1,8 +1,8 @@
 package com.example.library.controller;
 
 import com.example.library.dto.ActivityDTO;
-import com.example.library.dto.DashboardStats;
-import com.example.library.service.AdminService;
+// Day 2: dashboard metrics for borrow health, availability, and recent activity
+import com.example.library.dto.DashboardStats;import com.example.library.service.AdminService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

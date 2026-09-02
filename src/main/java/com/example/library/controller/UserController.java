@@ -1,5 +1,6 @@
 package com.example.library.controller;
 
+// Day 2: identity endpoint exposing the current authenticated user profile
 import com.example.library.dto.UserResponse;
 import com.example.library.security.CustomUserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

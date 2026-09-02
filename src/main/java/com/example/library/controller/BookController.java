@@ -1,5 +1,6 @@
 package com.example.library.controller;
 
+// Day 2: catalog endpoints for available books, search, and inventory updates
 import com.example.library.dto.BookRequest;
 import com.example.library.dto.BookResponse;
 import com.example.library.service.BookService;

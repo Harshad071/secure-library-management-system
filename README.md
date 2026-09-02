@@ -2,6 +2,8 @@
 
 A full-stack library management system with secure member and administrator workflows. Members can discover books, submit borrowing requests, track due dates, and return items. Administrators can manage inventory, review requests, monitor users, and oversee library activity.
 
+> This repository is the completed release assembled through three public milestones: foundation, core workflows, and final release polish.
+
 ## Features
 
 - JWT authentication with BCrypt password hashing
@@ -12,6 +14,17 @@ A full-stack library management system with secure member and administrator work
 - Member and administrator dashboards with live summary data
 - In-app notifications and persisted light/dark workspace theme
 - Docker Compose deployment with MySQL health checks and persistent storage
+
+## Demo accounts
+
+The development profile seeds these accounts on first startup:
+
+| Role | Username | Password |
+| --- | --- | --- |
+| Administrator | `admin` | `Admin@123` |
+| Member | `user` | `User@123` |
+
+Change or remove these credentials before deploying outside a local demo environment.
 
 ## Architecture
 
@@ -69,10 +82,10 @@ Use `docker compose down -v` only when you intentionally want to remove the data
 
 ### Backend
 
-Use Java 25 and a running MySQL database named `secure_library`:
+Use Java 25 and a running MySQL database named `secure_library`. Configure the password expected by your local MySQL installation:
 
 ```powershell
-$env:DB_PASSWORD = "your-mysql-password"
+$env:SPRING_DATASOURCE_PASSWORD = "your-mysql-password"
 .\mvnw.cmd spring-boot:run
 ```
 
@@ -80,11 +93,21 @@ $env:DB_PASSWORD = "your-mysql-password"
 
 ```powershell
 Set-Location frontend
-npm install
+npm ci
 npm run dev
 ```
 
 The frontend defaults to `http://localhost:8080/api` for local API requests. Set `VITE_API_BASE_URL` when the backend uses another address.
+
+## Main API areas
+
+All application endpoints are under `/api` and require a JWT unless noted otherwise:
+
+- `/api/auth/login` and `/api/auth/register` — public authentication
+- `/api/users/me` — current user profile
+- `/api/books` — catalog search and administrator inventory management
+- `/api/borrows` — member requests, returns, and administrator approvals
+- `/api/dashboard` — member and administrator summary data
 
 ## Quality checks
 
@@ -113,7 +136,7 @@ docs/                 Engineering notes and development log
 ## Security notes
 
 - Never commit `.env`, passwords, JWT secrets, or database dumps.
-- Replace the development JWT secret before any external deployment.
+- Replace the development JWT secret and seeded passwords before any external deployment.
 - Development seed accounts are for local demos only.
 - Report vulnerabilities privately rather than posting credentials or exploit details in public issues.
 

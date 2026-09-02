@@ -52,6 +52,7 @@ flowchart LR
 
 - Docker Desktop
 - Git
+- At least 4 GB of memory available to Docker
 
 Create a local environment file and start the stack:
 
@@ -61,7 +62,14 @@ Copy-Item .env.example .env
 docker compose up --build
 ```
 
-Open the application at `http://localhost:5173`.
+The first startup downloads the images, creates the `secure_library` database, and seeds demo users and books. Keep this terminal open to view service logs. Add `-d` to run in the background:
+
+```powershell
+docker compose up --build -d
+docker compose logs -f
+```
+
+Wait until MySQL is healthy and the backend is running, then open the application at `http://localhost:5173`.
 
 | Service | Address |
 | --- | --- |
@@ -82,12 +90,17 @@ Use `docker compose down -v` only when you intentionally want to remove the data
 
 ### Backend
 
-Use Java 25 and a running MySQL database named `secure_library`. Configure the password expected by your local MySQL installation:
+Use Java 25 and MySQL 8.4 (or a compatible MySQL 8 release). Create a database named `secure_library`, then configure the password expected by your local MySQL installation:
 
 ```powershell
+$env:SPRING_DATASOURCE_URL = "jdbc:mysql://localhost:3306/secure_library?createDatabaseIfNotExist=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8"
+$env:SPRING_DATASOURCE_USERNAME = "root"
 $env:SPRING_DATASOURCE_PASSWORD = "your-mysql-password"
+$env:JWT_SECRET = "replace-with-a-strong-base64-secret"
 .\mvnw.cmd spring-boot:run
 ```
+
+The backend listens on `http://localhost:8080`. The database schema is updated automatically and development seed data is created on first startup.
 
 ### Frontend
 
@@ -97,7 +110,23 @@ npm ci
 npm run dev
 ```
 
-The frontend defaults to `http://localhost:8080/api` for local API requests. Set `VITE_API_BASE_URL` when the backend uses another address.
+The frontend runs on `http://localhost:5173` and defaults to `http://localhost:8080/api` for API requests. If the backend uses another address, create `frontend/.env.local`:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+### Local startup order
+
+Run the backend first, then start the frontend in a second terminal. Visit `/login`, sign in with a demo account, and use the sidebar to explore the member or administrator workflow.
+
+## Typical user workflow
+
+1. Sign in as `user` and open **Books**.
+2. Search or filter the catalog and submit a borrow request.
+3. Sign out and sign in as `admin`.
+4. Open **Admin** and approve or reject the pending request.
+5. Return to the member account to view the updated status, due date, and history.
 
 ## Main API areas
 
@@ -109,6 +138,12 @@ All application endpoints are under `/api` and require a JWT unless noted otherw
 - `/api/borrows` — member requests, returns, and administrator approvals
 - `/api/dashboard` — member and administrator summary data
 
+The health endpoint is public and can be used to confirm that the backend is available:
+
+```powershell
+Invoke-WebRequest http://localhost:8081/actuator/health
+```
+
 ## Quality checks
 
 ```powershell
@@ -119,6 +154,33 @@ All application endpoints are under `/api` and require a JWT unless noted otherw
 Set-Location frontend
 npm run lint
 npm run build
+```
+
+## Troubleshooting
+
+### Port already in use
+
+Stop the process using ports `5173`, `8080`, `8081`, `3306`, or `3307`, or change the host mappings in `docker-compose.yml`.
+
+### Database connection fails
+
+Confirm MySQL is running, the database name is `secure_library`, and the configured username and password are correct. With Docker, check the service logs:
+
+```powershell
+docker compose logs mysql backend
+```
+
+### Login does not work after changing seed credentials
+
+Seed accounts are created only when their usernames do not already exist. Remove the Docker volume with `docker compose down -v` only if you intentionally want a clean local database, then start the stack again.
+
+### Reset the local Docker environment
+
+This removes containers and all stored database records:
+
+```powershell
+docker compose down -v
+docker compose up --build
 ```
 
 ## Project structure
